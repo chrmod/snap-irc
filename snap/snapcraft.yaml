@@ -1,0 +1,97 @@
+name: irc
+version: '0.1'
+summary: IRC client/proxy
+description: |
+  test
+
+grade: devel
+confinement: devmode
+
+apps:
+  weechat:
+    environment:
+      LC_ALL: C.UTF-8
+      TERM: xterm
+      WEECHAT_EXTRA_LIBDIR: /snap/irc/current/usr/lib/weechat
+    command: weechat
+  tmux:
+    command: bin/tmux
+    environment:
+      TERM: xterm-256color
+      LC_ALL: C.UTF-8
+    plugs:
+      - home
+  mosh:
+    environment:
+      LC_ALL: C.UTF-8
+    command: mosh
+  mosh-server:
+    environment:
+      LC_ALL: C.UTF-8
+    command: mosh-server
+  daemon:
+    command: bin/daemon.sh
+    daemon: simple
+    restart-condition: always
+  attach:
+    command: bin/attach.sh
+
+
+parts:
+  scripts:
+    plugin: dump
+    source: scripts
+    organize:
+      '*': bin/
+  weechat:
+    plugin: cmake
+    configflags:
+      - -DCMAKE_INSTALL_PREFIX=/usr
+      - -DENABLE_PYTHON=off
+      - -DENABLE_JAVASCRIPT=off
+      - -DENABLE_ASPELL=off
+    source: https://github.com/lheckemann/weechat.git
+    source-type: git
+    source-branch: libdir-env
+    build-packages:
+      - libgcrypt20-dev
+      - zlib1g-dev
+      - libcurl4-gnutls-dev
+      - openssl
+      - libncurses5-dev
+      - libgnutls28-dev
+      - gettext
+      - ca-certificates
+      - libaspell-dev
+      - libv8-dev
+      - libgpg-error-dev
+      - liblua5.3-dev
+    stage-packages:
+      - libcurl3-gnutls
+
+  tmux:
+    plugin: autotools
+    #configflags:
+    #  - --host=x86_64-unknown-linux-gnu
+    source: https://github.com/tmux/tmux.git
+    source-type: git
+    source-tag: '2.4'
+    build-packages:
+      - libevent-dev
+      - libncurses5-dev
+    stage-packages:
+      - libevent-2.0-5
+      - libncurses5
+  mosh:
+    plugin: autotools
+    source: https://mosh.org/mosh-1.3.0.tar.gz
+    #configflags:
+    #  - --host=x86_64-unknown-linux-gnu
+    #  - LDFLAGS=-static
+    build-packages:
+      - perl
+      - protobuf-compiler
+      - libprotobuf-dev
+      - libncurses5-dev
+      - zlib1g-dev
+      - libssl-dev
