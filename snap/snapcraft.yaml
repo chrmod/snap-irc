@@ -1,8 +1,8 @@
 name: irc
 version: '0.1'
-summary: IRC client/proxy
+summary: Wrapper for weechat IRC client
 description: |
-  test
+  Uses mosh to manage connection to weechat session hosted within tmux.
 
 grade: devel
 confinement: devmode
