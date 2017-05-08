@@ -11,13 +11,11 @@ apps:
   weechat:
     environment:
       LC_ALL: C.UTF-8
-      TERM: xterm
       WEECHAT_EXTRA_LIBDIR: /snap/irc/current/usr/lib/weechat
     command: weechat
   tmux:
     command: bin/tmux
     environment:
-      TERM: xterm-256color
       LC_ALL: C.UTF-8
     plugs:
       - home
@@ -29,20 +27,8 @@ apps:
     environment:
       LC_ALL: C.UTF-8
     command: mosh-server
-  daemon:
-    command: bin/daemon.sh
-    daemon: simple
-    restart-condition: always
-  attach:
-    command: bin/attach.sh
-
 
 parts:
-  scripts:
-    plugin: dump
-    source: scripts
-    organize:
-      '*': bin/
   weechat:
     plugin: cmake
     configflags:
