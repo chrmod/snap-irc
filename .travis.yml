@@ -1,0 +1,31 @@
+services:
+  - docker
+
+matrix:
+  include:
+  - os: linux
+    dist: trusty
+    sudo: required
+    env:
+      - ARCH=amd64
+
+script:
+  - docker build -t chrmod/snap-irc/$ARCH -f $ARCH.Dockerfile .
+  - docker run -v $(pwd):$(pwd) -w $(pwd) -t chrmod/snap-irc/$ARCH sh -c
+    "snapcraft"
+
+after_success:
+  - openssl aes-256-cbc
+    -K $encrypted_dfdd5052bb7e_key
+    -iv $encrypted_dfdd5052bb7e_iv
+    -in .snapcraft/travis_snapcraft.cfg
+    -out .snapcraft/snapcraft.cfg
+    -d
+
+deploy:
+  provider: script
+  script: docker run -v $(pwd):$(pwd) -w $(pwd) -t chrmod/snap-irc/$ARCH sh -c
+    "snapcraft push *.snap --release edge --target-arch=${ARCH}"
+  skip_cleanup: true
+  on:
+    branch: master
