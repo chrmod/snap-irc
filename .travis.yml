@@ -13,7 +13,7 @@ before_script:
   - cd archs/$ARCH
 
 script:
-  - docker build -t chrmod/snap-irc/$ARCH -f .
+  - docker build -t chrmod/snap-irc/$ARCH .
   - docker run -v $(pwd):$(pwd) -w $(pwd) -t chrmod/snap-irc/$ARCH sh -c
     "snapcraft"
 
