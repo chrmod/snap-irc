@@ -9,8 +9,11 @@ matrix:
     env:
       - ARCH=amd64
 
+before_script:
+  - cd archs/$ARCH
+
 script:
-  - docker build -t chrmod/snap-irc/$ARCH -f $ARCH.Dockerfile .
+  - docker build -t chrmod/snap-irc/$ARCH -f .
   - docker run -v $(pwd):$(pwd) -w $(pwd) -t chrmod/snap-irc/$ARCH sh -c
     "snapcraft"
 
