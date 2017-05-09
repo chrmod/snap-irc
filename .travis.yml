@@ -9,13 +9,13 @@ matrix:
     env:
       - ARCH=amd64
 
-before_script:
-  - cd archs/$ARCH
-
 script:
+  - cd archs/$ARCH
   - docker build -t chrmod/snap-irc/$ARCH .
   - docker run -v $(pwd):$(pwd) -w $(pwd) -t chrmod/snap-irc/$ARCH sh -c
     "snapcraft"
+  - cd ../..
+  - cp archs/$ARCH/*.snap .
 
 after_success:
   - openssl aes-256-cbc
@@ -28,7 +28,6 @@ after_success:
 deploy:
   provider: script
   script:
-    - cp -r ../../.snapcraft .
     - docker run -v $(pwd):$(pwd) -w $(pwd) -t chrmod/snap-irc/$ARCH sh -c
       "snapcraft push *.snap --release edge --target-arch=${ARCH}"
   skip_cleanup: true
