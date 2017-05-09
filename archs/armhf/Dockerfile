@@ -12,6 +12,7 @@ RUN  apt-get install -y \
   liblua5.3-dev:armhf \
   libncurses5-dev:armhf \
   libprotobuf-dev:armhf \
+  libprotobuf-dev \
   libssl-dev:armhf \
   libv8-dev:armhf \
   openssl \

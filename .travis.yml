@@ -18,7 +18,7 @@ script:
   - cd archs/$ARCH
   - docker build -t chrmod/snap-irc/$ARCH .
   - docker run -v $(pwd):$(pwd) -w $(pwd) -t chrmod/snap-irc/$ARCH sh -c
-    "snapcraft"
+    "snapcraft --target-arch=${ARCH}"
   - cd ../..
   - cp archs/$ARCH/*.snap .
 
