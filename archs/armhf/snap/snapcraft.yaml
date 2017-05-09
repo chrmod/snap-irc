@@ -1,0 +1,59 @@
+name: irc
+version: '0.1'
+summary: Wrapper for weechat IRC client
+description: |
+  Uses mosh to manage connection to weechat session hosted within tmux.
+
+grade: devel
+confinement: devmode
+
+apps:
+  weechat:
+    environment:
+      LC_ALL: C.UTF-8
+      WEECHAT_EXTRA_LIBDIR: /snap/irc/current/usr/lib/weechat
+    command: weechat
+  tmux:
+    command: bin/tmux
+    environment:
+      LC_ALL: C.UTF-8
+    plugs:
+      - home
+  mosh:
+    environment:
+      LC_ALL: C.UTF-8
+    command: mosh
+  mosh-server:
+    environment:
+      LC_ALL: C.UTF-8
+    command: mosh-server
+
+parts:
+  weechat:
+    plugin: x-cmake
+    configflags:
+      - -DCMAKE_INSTALL_PREFIX=/usr
+      - -DENABLE_PYTHON=off
+      - -DENABLE_JAVASCRIPT=off
+      - -DENABLE_ASPELL=off
+    source: https://github.com/lheckemann/weechat.git
+    source-type: git
+    source-branch: libdir-env
+    stage-packages:
+      - libcurl3-gnutls
+  tmux:
+    plugin: x-autotools
+    configflags:
+      - --host=x86_64-unknown-linux-gnu
+    source: https://github.com/tmux/tmux.git
+    source-type: git
+    source-tag: '2.4'
+    stage-packages:
+      - libevent-2.0-5
+      - libncurses5
+  mosh:
+    plugin: x-autotools
+    source: https://mosh.org/mosh-1.3.0.tar.gz
+    configflags:
+      - --host=x86_64-unknown-linux-gnu
+      - LDFLAGS=-static

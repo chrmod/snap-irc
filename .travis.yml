@@ -8,6 +8,11 @@ matrix:
     sudo: required
     env:
       - ARCH=amd64
+  - os: linux
+    dist: trusty
+    sudo: required
+    env:
+      - ARCH=armhf
 
 script:
   - cd archs/$ARCH
