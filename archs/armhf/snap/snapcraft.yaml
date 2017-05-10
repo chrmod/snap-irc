@@ -16,6 +16,7 @@ apps:
   tmux:
     command: bin/tmux
     environment:
+      WEECHAT_EXTRA_LIBDIR: /snap/irc/current/usr/lib/weechat
       LC_ALL: C.UTF-8
     plugs:
       - home
@@ -25,6 +26,7 @@ apps:
     command: mosh
   mosh-server:
     environment:
+      WEECHAT_EXTRA_LIBDIR: /snap/irc/current/usr/lib/weechat
       LC_ALL: C.UTF-8
     command: mosh-server
 
