@@ -11,12 +11,12 @@ Install with:
 To connect:
 
 ```bash
-   irc.mosh <hostname> --server=/snap/bin/irc.mosh-server -- /snap/bin/irc.tmux new-session -A -s irc
+   irc.mosh <hostname> --server=/snap/bin/irc.mosh-server -- tmux new-session -A -s irc
 ```
 
 Start weechat with:
 ```bash
-irc.weechat
+weechat
 ```
 
 Detach from tmux session with `C-b d` (`Control + b` and then `d`).
