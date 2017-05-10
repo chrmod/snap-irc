@@ -5,7 +5,7 @@ description: |
   Uses mosh to manage connection to weechat session hosted within tmux.
 
 grade: devel
-confinement: devmode
+confinement: strict
 
 apps:
   weechat:
@@ -13,6 +13,9 @@ apps:
       LC_ALL: C.UTF-8
       WEECHAT_EXTRA_LIBDIR: /snap/irc/current/usr/lib/weechat
     command: weechat
+    plugs:
+      - network
+      - network-bind
   tmux:
     command: bin/tmux
     environment:
@@ -24,11 +27,15 @@ apps:
     environment:
       LC_ALL: C.UTF-8
     command: mosh
+    plugs:
+      - network
   mosh-server:
     environment:
       WEECHAT_EXTRA_LIBDIR: /snap/irc/current/usr/lib/weechat
       LC_ALL: C.UTF-8
     command: mosh-server
+    plugs:
+      - network-bind
 
 parts:
   weechat:
@@ -58,8 +65,6 @@ parts:
       - libcurl3-gnutls
   tmux:
     plugin: autotools
-    #configflags:
-    #  - --host=x86_64-unknown-linux-gnu
     source: https://github.com/tmux/tmux.git
     source-type: git
     source-tag: '2.4'
@@ -72,11 +77,11 @@ parts:
   mosh:
     plugin: autotools
     source: https://mosh.org/mosh-1.3.0.tar.gz
-    #configflags:
-    #  - --host=x86_64-unknown-linux-gnu
-    #  - LDFLAGS=-static
-    build-packages:
+    stage-packages:
       - perl
+      - perl-base
+      - tmux
+    build-packages:
       - protobuf-compiler
       - libprotobuf-dev
       - libncurses5-dev
